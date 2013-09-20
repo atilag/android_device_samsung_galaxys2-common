@@ -23,19 +23,24 @@ COMMONBASE=../../../$COMMONOUTDIR/proprietary
 COMMONMAKEFILE=../../../$COMMONOUTDIR/common-vendor-blobs.mk
 COMMONPROPS=../galaxys2-common/proprietary-files.txt
 
-mkdir -p ../../../vendor/$VENDOR/$COMMON/proprietary
 
-adb root
-adb wait-for-device
+if [ -d ${DEVICEBASE} ]; then
+    echo "Already pulled common files found. Skipping pull..."
+else
+    mkdir -p ../../../vendor/$VENDOR/$COMMON/proprietary
 
-echo "Pulling common files..."
-for FILE in `cat $COMMONPROPS | grep -v ^# | grep -v ^$`; do
-    DIR=`dirname $FILE`
-    if [ ! -d $COMMONBASE/$DIR ]; then
-        mkdir -p $COMMONBASE/$DIR
-    fi
-    adb pull /$FILE $COMMONBASE/$FILE
-done
+    adb root
+    adb wait-for-device
+
+    echo "Pulling common files..."
+    for FILE in `cat $COMMONPROPS | grep -v ^# | grep -v ^$`; do
+        DIR=`dirname $FILE`
+        if [ ! -d $COMMONBASE/$DIR ]; then
+            mkdir -p $COMMONBASE/$DIR
+        fi
+        adb pull /$FILE $COMMONBASE/$FILE
+    done
+fi
 
 (cat << EOF) | sed s/__COMMON__/$COMMON/g | sed s/__VENDOR__/$VENDOR/g > $COMMONMAKEFILE
 # Copyright (C) 2012 The CyanogenMod Project
