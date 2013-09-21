@@ -24,7 +24,7 @@ COMMONMAKEFILE=../../../$COMMONOUTDIR/common-vendor-blobs.mk
 COMMONPROPS=../galaxys2-common/proprietary-files.txt
 
 
-if [ -d ${DEVICEBASE} ]; then
+if [ -d ${COMMONBASE} ]; then
     echo "Already pulled common files found. Skipping pull..."
 else
     mkdir -p ../../../vendor/$VENDOR/$COMMON/proprietary
